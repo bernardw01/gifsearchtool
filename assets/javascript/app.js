@@ -12,6 +12,7 @@ var btnArray = [];
 $(document).ready(function () {
 
 
+
     function runSearch() {
 
         //var queryURL = "http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC ";
@@ -32,13 +33,11 @@ $(document).ready(function () {
         });
     }
 
-    $('#submit').click(addButton);
-
-
     function loadPics() {
         //Once the document is loaded check the config file and add a media object for each player in the config file
         $("#searchResults").empty();
 
+        /*
         var resultsNav = $('<div>');
         var nextLink = $('<a>');
         var prevLink = $('<a>');
@@ -46,6 +45,7 @@ $(document).ready(function () {
         nextLink.text('Next >>');
         prevLink.attr('id', 'prev');
         prevLink.text('<< Prev');
+
 
         if (offset > 0) {
             resultsNav.append(prevLink);
@@ -56,16 +56,18 @@ $(document).ready(function () {
         $("#searchResults").append(resultsNav);
 
         $('#next').bind('click', function () {
-            offset++
+         offset + parseInt($('#limit option:selected').text());
             runSearch();
         });
         $('#prev').bind('click', function () {
             console.log('This isnt working');
-            offset--;
+         offset - parseInt($('#limit option:selected').text());
             runSearch();
         });
+         */
 
         for (var index = 0; index < gifs.length; index++) {
+
             var picture = gifs[index];
             console.log("------------------------------------");
             console.log(picture);
@@ -79,7 +81,10 @@ $(document).ready(function () {
             newMediaLeft.addClass("media-left");
             var newMediaImage = $("<img>");
             newMediaImage.addClass("media-object media-image");
-            newMediaImage.attr("src", gifs[index].images.fixed_height_small.url);
+            newMediaImage.attr("src", gifs[index].images.fixed_height_small_still.url);
+            newMediaImage.attr("data-still", gifs[index].images.fixed_height_small_still.url);
+            newMediaImage.attr("data-animated", gifs[index].images.fixed_height_small.url);
+
             newMediaLeft.append(newMediaImage);
 
             var newMediaBody = $("<div>");
@@ -120,6 +125,15 @@ $(document).ready(function () {
             //Put a border around the character panel
 
         }
+        $('.media-image').hover(function () {
+            console.log('OVER');
+            $(this).attr('src', $(this).attr('data-animated'));
+            console.log('Mouse Over ' + $(this).attr('data-animated'));
+        }, function () {
+            console.log('Mouse Out');
+            $(this).attr('src', $(this).attr('data-still'));
+        });
+
     }
 
     function loadButtons() {
@@ -151,7 +165,11 @@ $(document).ready(function () {
 
     }
 
+
     loadButtons();
     console.log(categories);
+
+    $('#submit').click(addButton);
+
 });
 
